@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continuous QR Scanner</title>
+    <title>QR Code Scanner</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,14 +27,14 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
             padding: 30px;
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             text-align: center;
         }
         
         h1 {
             color: #333;
             margin-bottom: 25px;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -71,13 +71,6 @@
             display: block;
         }
         
-        .warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-            display: block;
-        }
-        
         .info {
             background: #d1ecf1;
             color: #0c5460;
@@ -91,8 +84,7 @@
         
         #scannerContainer {
             width: 100%;
-            max-width: 500px;
-            height: 350px;
+            height: 300px;
             margin: 0 auto 20px;
             border-radius: 10px;
             overflow: hidden;
@@ -131,8 +123,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 250px;
-            height: 250px;
+            width: 200px;
+            height: 200px;
             border: 2px solid #00ff00;
             border-radius: 10px;
             box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
@@ -144,40 +136,40 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 30px;
-            height: 30px;
-            border-top: 4px solid #00ff00;
-            border-left: 4px solid #00ff00;
+            width: 25px;
+            height: 25px;
+            border-top: 3px solid #00ff00;
+            border-left: 3px solid #00ff00;
         }
         
         .scanner-guide-corner2 {
             position: absolute;
             top: 0;
             right: 0;
-            width: 30px;
-            height: 30px;
-            border-top: 4px solid #00ff00;
-            border-right: 4px solid #00ff00;
+            width: 25px;
+            height: 25px;
+            border-top: 3px solid #00ff00;
+            border-right: 3px solid #00ff00;
         }
         
         .scanner-guide-corner3 {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 30px;
-            height: 30px;
-            border-bottom: 4px solid #00ff00;
-            border-left: 4px solid #00ff00;
+            width: 25px;
+            height: 25px;
+            border-bottom: 3px solid #00ff00;
+            border-left: 3px solid #00ff00;
         }
         
         .scanner-guide-corner4 {
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 30px;
-            height: 30px;
-            border-bottom: 4px solid #00ff00;
-            border-right: 4px solid #00ff00;
+            width: 25px;
+            height: 25px;
+            border-bottom: 3px solid #00ff00;
+            border-right: 3px solid #00ff00;
         }
         
         .controls {
@@ -188,7 +180,7 @@
         }
         
         button {
-            padding: 14px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
@@ -220,121 +212,102 @@
             background: #e9ecef;
         }
         
-        .stats-panel {
+        .url-display-section {
+            margin-top: 25px;
+        }
+        
+        .url-display {
             background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .stat-item {
-            text-align: center;
-            min-width: 120px;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-            margin-top: 5px;
-        }
-        
-        .recent-urls {
-            margin-top: 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            background: white;
             border-radius: 8px;
             padding: 15px;
-            border: 1px solid #ddd;
+            margin-top: 15px;
             text-align: left;
+            border-left: 4px solid #667eea;
+            min-height: 110px;
         }
         
-        .recent-title {
-            font-weight: 600;
-            color: #333;
+        .url-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
-        .url-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            font-family: monospace;
-            font-size: 12px;
+        .url-title {
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .url-content {
             display: flex;
-            align-items: center;
             gap: 10px;
+            align-items: flex-start;
         }
         
-        .url-item:last-child {
-            border-bottom: none;
+        .url-text-container {
+            flex: 1;
+            min-height: 60px;
         }
         
-        .url-time {
-            font-size: 11px;
+        .url-placeholder {
             color: #999;
-            min-width: 50px;
+            font-style: italic;
+            padding: 20px 10px;
+            text-align: center;
+            font-size: 14px;
         }
         
         .url-text {
-            flex: 1;
+            font-family: monospace;
+            font-size: 14px;
             word-break: break-all;
+            color: #333;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            max-height: 80px;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .btn-newtab {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 10px 15px;
+            white-space: nowrap;
+            align-self: center;
+        }
+        
+        .btn-newtab:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-newtab:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
         
         .instructions {
             margin-top: 25px;
-            padding: 20px;
+            padding: 15px;
             background: #e3f2fd;
             border-radius: 10px;
             text-align: left;
-        }
-        
-        .instructions h3 {
-            color: #333;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .instructions ul {
-            padding-left: 20px;
-            color: #555;
-            line-height: 1.6;
-        }
-        
-        .instructions li {
-            margin-bottom: 8px;
-        }
-        
-        .browser-warning {
-            background: #ffebee;
-            border: 1px solid #ffcdd2;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            display: none;
-        }
-        
-        .browser-warning.show {
-            display: block;
+            font-size: 14px;
         }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         @keyframes scanLine {
@@ -343,15 +316,15 @@
         }
         
         @keyframes flash {
-            0%, 100% { background-color: transparent; }
-            50% { background-color: rgba(76, 175, 80, 0.3); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
         
         .scan-line {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            width: 250px;
+            width: 200px;
             height: 2px;
             background: rgba(0, 255, 0, 0.8);
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
@@ -359,8 +332,31 @@
             animation: scanLine 2s infinite linear;
         }
         
-        .flash-effect {
-            animation: flash 0.5s ease-in-out;
+        .scanner-flash {
+            animation: flash 0.3s ease-in-out;
+        }
+        
+        .scan-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .scan-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
         
         @media (max-width: 600px) {
@@ -377,8 +373,8 @@
             }
             
             .scanner-guide {
-                width: 200px;
-                height: 200px;
+                width: 180px;
+                height: 180px;
             }
             
             .controls {
@@ -390,9 +386,13 @@
                 justify-content: center;
             }
             
-            .stats-panel {
+            .url-content {
                 flex-direction: column;
-                align-items: center;
+                gap: 10px;
+            }
+            
+            .btn-newtab {
+                width: 100%;
             }
         }
     </style>
@@ -403,17 +403,8 @@
     <div class="container">
         <h1>
             <span>📷</span>
-            连续QR扫描器
+            QR Code Scanner
         </h1>
-        
-        <div id="browserWarning" class="browser-warning">
-            <strong>⚠️ 浏览器提示：</strong> 
-            为确保自动打开新标签页功能正常工作，请确保：
-            <ul style="margin-top: 8px; margin-left: 20px;">
-                <li>已允许此网站的弹出窗口</li>
-                <li>使用最新版本的 Chrome/Edge/Firefox</li>
-            </ul>
-        </div>
         
         <div id="statusMessage" class="status-message"></div>
         
@@ -421,23 +412,19 @@
             <div id="scannerContainer">
                 <div id="scannerOverlay" class="scanner-overlay">
                     <div style="font-size: 48px; margin-bottom: 15px;">📷</div>
-                    <h3 style="margin-bottom: 10px;">连续QR扫描器</h3>
-                    <p style="margin-bottom: 20px; max-width: 400px; line-height: 1.5;">
-                        点击下方按钮开启摄像头<br>
-                        摄像头将保持开启，连续扫描QR码
+                    <h3 style="margin-bottom: 10px;">QR Code Scanner</h3>
+                    <p style="margin-bottom: 20px; line-height: 1.5;">
+                        Click to start camera<br>
+                        Scan QR codes with URLs
                     </p>
                     <button id="startScanner" class="btn-primary">
                         <span>▶️</span>
-                        开启摄像头
+                        Start Camera
                     </button>
-                    <p style="margin-top: 20px; font-size: 14px; color: #aaa;">
-                        每扫描到一个新QR码会自动在新标签页打开
-                    </p>
                 </div>
                 <video id="scannerVideo" playsinline></video>
                 <canvas id="scannerCanvas" style="display: none;"></canvas>
                 
-                <!-- Scanner guide with corners -->
                 <div class="scanner-guide">
                     <div class="scanner-guide-corner1"></div>
                     <div class="scanner-guide-corner2"></div>
@@ -445,70 +432,72 @@
                     <div class="scanner-guide-corner4"></div>
                 </div>
                 
-                <!-- Scanning line animation -->
                 <div class="scan-line"></div>
             </div>
             
             <div class="controls">
-                <button id="startBtn" class="btn-primary" onclick="startContinuousScanning()">
+                <button id="startBtn" class="btn-primary" onclick="startScanning()">
                     <span>▶️</span>
-                    开始连续扫描
+                    Start Scanning
                 </button>
-                <button id="stopBtn" class="btn-secondary" onclick="stopContinuousScanning()" style="display: none;">
+                <button id="stopBtn" class="btn-secondary" onclick="stopScanning()" style="display: none;">
                     <span>⏸️</span>
-                    停止扫描
+                    Stop
                 </button>
                 <button id="switchCameraBtn" class="btn-secondary" onclick="switchCamera()" style="display: none;">
                     <span>🔄</span>
-                    切换摄像头
+                    Switch Camera
                 </button>
             </div>
-        </div>
-        
-        <div class="stats-panel">
-            <div class="stat-item">
-                <div class="stat-value" id="totalScanned">0</div>
-                <div class="stat-label">扫描总数</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="uniqueUrls">0</div>
-                <div class="stat-label">不同链接数</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="lastScanTime">-</div>
-                <div class="stat-label">上次扫描</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="scanStatus">❌</div>
-                <div class="stat-label">扫描状态</div>
+            
+            <div class="scan-indicator">
+                <div class="scan-dot"></div>
+                <span>Scanning active - Camera is ON</span>
             </div>
         </div>
         
-        <div class="recent-urls">
-            <div class="recent-title">
-                <span>📋</span>
-                最近扫描的链接
-            </div>
-            <div id="recentUrlsList">
-                <!-- 最近扫描的URL列表会显示在这里 -->
-                <div style="text-align: center; color: #999; padding: 20px;">
-                    暂无扫描记录
+        <div class="url-display-section">
+            <div class="url-header">
+                <div class="url-title">
+                    <span>🔗</span>
+                    Current Scanned URL
                 </div>
+                <div style="font-size: 12px; color: #999;" id="scanTime">
+                    -
+                </div>
+            </div>
+            
+            <div class="url-display">
+                <div class="url-content">
+                    <div class="url-text-container" id="urlContainer">
+                        <div class="url-placeholder" id="urlPlaceholder">
+                            No QR code scanned yet.<br>
+                            Scan a QR code to see the URL here.
+                        </div>
+                    </div>
+                    <button class="btn-newtab" id="openTabBtn" onclick="openCurrentUrl()" disabled>
+                        <span>🌐</span>
+                        Open in New Tab
+                    </button>
+                </div>
+            </div>
+            
+            <div style="margin-top: 10px; font-size: 12px; color: #666; text-align: center;">
+                Each new QR code will replace the current URL<br>
+                Click button to open the currently displayed URL
             </div>
         </div>
         
         <div class="instructions">
-            <h3>
-                <span>💡</span>
-                使用说明：
-            </h3>
-            <ul>
-                <li><strong>点击"开始连续扫描"按钮</strong> - 开启摄像头并开始扫描</li>
-                <li><strong>摄像头保持开启</strong> - 连续扫描不同的QR码</li>
-                <li><strong>自动打开新标签页</strong> - 每扫描到一个新链接会自动打开</li>
-                <li><strong>避免重复扫描</strong> - 同一链接短时间内不会重复打开</li>
-                <li><strong>随时停止</strong> - 点击"停止扫描"按钮结束</li>
-            </ul>
+            <div style="font-weight: 600; margin-bottom: 8px;">How to use:</div>
+            <ol style="padding-left: 20px; margin: 0;">
+                <li>Click "Start Camera" to enable webcam</li>
+                <li>Position QR code within the green frame</li>
+                <li>URL will appear below - replaces previous one</li>
+                <li>Click "Open in New Tab" to open current URL</li>
+                <li>Scan next QR code - it will replace current URL</li>
+                <li>Click button again to open new URL</li>
+            </ol>
         </div>
     </div>
 
@@ -516,20 +505,14 @@
         // Global variables
         let videoStream = null;
         let scannerContext = null;
-        let isContinuousScanning = false;
+        let isScanning = false;
         let useFrontCamera = false;
-        let lastScannedUrl = null;
+        let currentUrl = null;
+        let lastScanTime = null;
         let scanCooldown = false;
         
-        // Statistics
-        let totalScanned = 0;
-        let uniqueUrls = new Set();
-        let recentUrls = [];
-        const MAX_RECENT_URLS = 10;
-        const SCAN_COOLDOWN_TIME = 1000; // 1秒冷却时间，防止重复扫描同一个码
-        
         // Show status message
-        function showStatus(message, type = 'info', duration = 3000) {
+        function showStatus(message, type = 'info', duration = 1500) {
             const statusDiv = document.getElementById('statusMessage');
             statusDiv.className = `status-message ${type}`;
             statusDiv.innerHTML = message;
@@ -542,65 +525,55 @@
             }
         }
         
-        // Update statistics display
-        function updateStatistics() {
-            document.getElementById('totalScanned').textContent = totalScanned;
-            document.getElementById('uniqueUrls').textContent = uniqueUrls.size;
-            document.getElementById('scanStatus').textContent = isContinuousScanning ? '✅' : '❌';
-        }
-        
-        // Add URL to recent list
-        function addToRecentUrls(url) {
+        // Update scan time display
+        function updateScanTime() {
             const now = new Date();
             const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-            
-            recentUrls.unshift({
-                url: url,
-                time: timeStr,
-                timestamp: now.getTime()
-            });
-            
-            // Keep only recent items
-            if (recentUrls.length > MAX_RECENT_URLS) {
-                recentUrls.pop();
-            }
-            
-            // Update display
-            updateRecentUrlsDisplay();
+            document.getElementById('scanTime').textContent = timeStr;
+            lastScanTime = now;
         }
         
-        // Update recent URLs display
-        function updateRecentUrlsDisplay() {
-            const listElement = document.getElementById('recentUrlsList');
+        // Display URL in the container
+        function displayUrl(url) {
+            const container = document.getElementById('urlContainer');
+            const placeholder = document.getElementById('urlPlaceholder');
             
-            if (recentUrls.length === 0) {
-                listElement.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">暂无扫描记录</div>';
-                return;
+            // Remove placeholder
+            placeholder.style.display = 'none';
+            
+            // Create or update URL display
+            let urlElement = container.querySelector('.url-text');
+            if (!urlElement) {
+                urlElement = document.createElement('div');
+                urlElement.className = 'url-text';
+                container.appendChild(urlElement);
             }
             
-            listElement.innerHTML = recentUrls.map(item => `
-                <div class="url-item">
-                    <div class="url-time">${item.time}</div>
-                    <div class="url-text">${item.url}</div>
-                </div>
-            `).join('');
+            // Update URL text
+            urlElement.textContent = url;
+            
+            // Enable open button
+            document.getElementById('openTabBtn').disabled = false;
+            
+            // Update time
+            updateScanTime();
+            
+            // Show brief success message
+            showStatus('✅ New URL captured', 'success');
         }
         
-        // Start continuous scanning
-        async function startContinuousScanning() {
+        // Start scanning
+        async function startScanning() {
             try {
-                showStatus('🔄 正在启动连续扫描模式...', 'loading');
+                showStatus('🔄 Starting camera...', 'loading');
                 
-                // Get available cameras
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                
-                if (videoDevices.length === 0) {
-                    showStatus('❌ 未找到摄像头', 'error');
+                // Check for camera support
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    showStatus('❌ Camera not supported', 'error');
                     return;
                 }
                 
-                // Set constraints based on camera preference
+                // Get camera constraints
                 const constraints = {
                     video: {
                         facingMode: useFrontCamera ? 'user' : 'environment',
@@ -625,37 +598,33 @@
                 // Wait for video to be ready
                 videoElement.onloadedmetadata = () => {
                     videoElement.play();
-                    showStatus('✅ 连续扫描模式已启动！', 'success');
+                    showStatus('✅ Camera ready. Scan QR codes.', 'success');
                     
                     // Initialize canvas context
                     const canvas = document.getElementById('scannerCanvas');
                     scannerContext = canvas.getContext('2d', { willReadFrequently: true });
                     
-                    // Start continuous scanning
-                    isContinuousScanning = true;
-                    updateStatistics();
-                    startScanLoop();
+                    // Start scanning loop
+                    isScanning = true;
+                    scanLoop();
                 };
                 
             } catch (err) {
                 console.error('Camera error:', err);
                 
-                // Show specific error messages
-                if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-                    showStatus('❌ 未找到摄像头', 'error');
-                } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-                    showStatus('❌ 摄像头权限被拒绝。请允许摄像头访问。', 'error');
-                } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-                    showStatus('❌ 摄像头已被其他应用程序占用。', 'error');
+                if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                    showStatus('❌ Camera permission denied. Please allow access.', 'error');
+                } else if (err.name === 'NotFoundError') {
+                    showStatus('❌ No camera found', 'error');
                 } else {
-                    showStatus('❌ 摄像头错误: ' + err.message, 'error');
+                    showStatus('❌ Camera error: ' + err.message, 'error');
                 }
             }
         }
         
-        // Stop continuous scanning
-        function stopContinuousScanning() {
-            isContinuousScanning = false;
+        // Stop scanning
+        function stopScanning() {
+            isScanning = false;
             
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
@@ -671,118 +640,97 @@
             document.getElementById('stopBtn').style.display = 'none';
             document.getElementById('switchCameraBtn').style.display = 'none';
             
-            showStatus('⏸️ 连续扫描已停止', 'info');
-            updateStatistics();
+            showStatus('⏸️ Scanning stopped', 'info');
         }
         
-        // Switch between front and rear cameras
+        // Switch camera
         function switchCamera() {
             useFrontCamera = !useFrontCamera;
             
-            // Restart scanning with new camera
-            stopContinuousScanning();
+            // Restart with new camera
+            stopScanning();
             setTimeout(() => {
-                startContinuousScanning();
+                startScanning();
             }, 500);
         }
         
         // Main scanning loop
-        function startScanLoop() {
-            if (!isContinuousScanning || !scannerContext) return;
+        function scanLoop() {
+            if (!isScanning || !scannerContext) return;
             
             const videoElement = document.getElementById('scannerVideo');
             const canvas = document.getElementById('scannerCanvas');
             
             if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-                // Set canvas dimensions to match video
+                // Update canvas dimensions
                 canvas.height = videoElement.videoHeight;
                 canvas.width = videoElement.videoWidth;
                 
-                // Draw current video frame to canvas
+                // Draw video frame to canvas
                 scannerContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
                 
                 try {
-                    // Get image data for QR code scanning
+                    // Get image data
                     const imageData = scannerContext.getImageData(0, 0, canvas.width, canvas.height);
                     
-                    // Use jsQR library to detect QR code
-                    const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                        inversionAttempts: "dontInvert",
-                    });
-                    
-                    if (code && !scanCooldown) {
-                        // QR code detected and not in cooldown
-                        processDetectedQR(code.data);
+                    // Scan for QR code (only if not in cooldown)
+                    if (!scanCooldown) {
+                        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                            inversionAttempts: "dontInvert",
+                        });
+                        
+                        if (code) {
+                            // QR code detected
+                            processQRCode(code.data);
+                        }
                     }
                 } catch (error) {
-                    console.warn('Error scanning QR code:', error);
+                    // Silently handle scanning errors
                 }
             }
             
-            // Continue scanning loop
-            if (isContinuousScanning) {
-                requestAnimationFrame(startScanLoop);
+            // Continue scanning
+            if (isScanning) {
+                requestAnimationFrame(scanLoop);
             }
         }
         
-        // Process detected QR code
-        function processDetectedQR(qrData) {
-            // Check if it's a URL
+        // Process scanned QR code
+        function processQRCode(qrData) {
             let url = qrData.trim();
             
-            // Validate and format URL
-            if (!isValidUrl(url)) {
-                showStatus('⚠️ 无效的URL格式', 'warning', 2000);
-                startCooldown();
+            // Validate URL
+            if (!url || url.length === 0) {
                 return;
             }
             
-            // Ensure URL has proper protocol
+            // Add protocol if missing
             if (!url.startsWith('http://') && !url.startsWith('https://')) {
                 url = 'https://' + url;
             }
             
-            // Normalize URL for comparison (remove trailing slash, lowercase)
-            const normalizedUrl = url.toLowerCase().replace(/\/$/, '');
-            
-            // Check if this is the same as last scanned URL
-            if (lastScannedUrl === normalizedUrl) {
-                showStatus('🔄 同一链接，跳过...', 'info', 1000);
-                startCooldown();
+            // Validate URL format
+            try {
+                new URL(url);
+            } catch (e) {
+                showStatus('⚠️ Invalid URL format', 'error', 1500);
                 return;
             }
             
-            // Update last scanned URL
-            lastScannedUrl = normalizedUrl;
+            // Update current URL
+            currentUrl = url;
             
-            // Update statistics
-            totalScanned++;
-            uniqueUrls.add(normalizedUrl);
+            // Display the URL (replaces previous one)
+            displayUrl(url);
             
-            // Add to recent URLs
-            addToRecentUrls(url);
-            
-            // Update display
-            updateStatistics();
-            
-            // Update last scan time
-            const now = new Date();
-            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-            document.getElementById('lastScanTime').textContent = timeStr;
-            
-            // Visual feedback - flash effect
-            document.getElementById('scannerContainer').classList.add('flash-effect');
+            // Visual feedback
+            const scannerContainer = document.getElementById('scannerContainer');
+            scannerContainer.classList.add('scanner-flash');
             setTimeout(() => {
-                document.getElementById('scannerContainer').classList.remove('flash-effect');
-            }, 500);
+                scannerContainer.classList.remove('scanner-flash');
+            }, 300);
             
-            // Show brief status
-            showStatus(`✅ 发现新链接: ${getDomainFromUrl(url)}`, 'success', 2000);
-            
-            // Open in new tab
-            openInNewTab(url);
-            
-            // Start cooldown to prevent duplicate scans
+            // Start cooldown to prevent rapid re-scanning
             startCooldown();
         }
         
@@ -791,99 +739,38 @@
             scanCooldown = true;
             setTimeout(() => {
                 scanCooldown = false;
-                lastScannedUrl = null; // Reset after cooldown
-            }, SCAN_COOLDOWN_TIME);
+            }, 1000); // 1 second cooldown
         }
         
-        // Extract domain from URL for display
-        function getDomainFromUrl(url) {
-            try {
-                const urlObj = new URL(url);
-                return urlObj.hostname;
-            } catch (e) {
-                return url.substring(0, 30) + (url.length > 30 ? '...' : '');
+        // Open current URL in new tab
+        function openCurrentUrl() {
+            if (!currentUrl) {
+                showStatus('❌ No URL to open', 'error', 2000);
+                return;
             }
-        }
-        
-        // Validate URL
-        function isValidUrl(string) {
+            
             try {
-                let url = string;
-                if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                    url = 'https://' + url;
-                }
-                new URL(url);
-                return url.length > 0;
-            } catch (_) {
-                return false;
-            }
-        }
-        
-        // Open URL in new tab
-        function openInNewTab(url) {
-            try {
-                const newWindow = window.open(url, '_blank');
-                
-                if (newWindow === null || typeof newWindow === 'undefined') {
-                    // Popup blocked
-                    showStatus('⚠️ 弹出窗口被阻止。请手动复制链接。', 'warning', 5000);
-                    document.getElementById('browserWarning').classList.add('show');
-                    
-                    // Copy URL to clipboard as fallback
-                    navigator.clipboard.writeText(url).then(() => {
-                        console.log('URL copied to clipboard:', url);
-                    });
-                } else {
-                    // Successfully opened
-                    console.log('Opened URL in new tab:', url);
-                }
+                window.open(currentUrl, '_blank');
+                showStatus('🌐 Opening URL in new tab...', 'info', 1500);
             } catch (error) {
-                console.error('Error opening URL:', error);
-                showStatus('❌ 打开链接时出错: ' + error.message, 'error', 3000);
+                showStatus('❌ Failed to open URL', 'error', 2000);
             }
         }
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if browser supports camera access
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                showStatus('❌ 您的浏览器不支持摄像头访问', 'error');
-                document.getElementById('startScanner').disabled = true;
-                document.getElementById('startScanner').innerHTML = '<span>❌</span> 不支持';
-            }
+            // Add click event to overlay button
+            document.getElementById('startScanner').addEventListener('click', startScanning);
             
-            // Event listener for start button in overlay
-            document.getElementById('startScanner').addEventListener('click', startContinuousScanning);
-            
-            // Show browser warning about popups
-            const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-            if (isChrome) {
-                setTimeout(() => {
-                    document.getElementById('browserWarning').classList.add('show');
-                }, 3000);
-            }
-            
-            // Initialize statistics
-            updateStatistics();
-            updateRecentUrlsDisplay();
+            // Initialize scan time display
+            document.getElementById('scanTime').textContent = '-';
         });
         
-        // Handle page visibility changes
+        // Handle page visibility
         document.addEventListener('visibilitychange', function() {
-            if (document.hidden && isContinuousScanning) {
-                showStatus('⏸️ 页面隐藏，暂停扫描', 'warning');
-            } else if (!document.hidden && isContinuousScanning) {
-                showStatus('🔄 恢复扫描', 'info');
-            }
-        });
-        
-        // Handle page close
-        window.addEventListener('beforeunload', function(e) {
-            if (isContinuousScanning) {
-                // Warn user if scanning is active
-                e.preventDefault();
-                e.returnValue = '扫描正在进行中，确定要离开吗？';
-                return '扫描正在进行中，确定要离开吗？';
+            if (document.hidden && isScanning) {
+                // Page hidden, pause scanning visually
+                showStatus('⏸️ Page hidden', 'info', 1000);
             }
         });
     </script>
